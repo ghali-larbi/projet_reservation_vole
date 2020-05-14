@@ -33,7 +33,6 @@ create table reservation
    idClient             int not null ,
    idvol                int not null,
    dateResr             date,
-   nombrelimite         int,
    primary key (idReservation) ,
    FOREIGN KEY (idClient) REFERENCES client(idClient) on update cascade on delete cascade,
    FOREIGN KEY (idvol) REFERENCES vol(idvol) on update cascade on delete cascade

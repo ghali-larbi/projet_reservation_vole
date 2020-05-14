@@ -85,7 +85,7 @@
 <div class="row detail">
           <div class="col-12 col-sm-12 col-md-12 col-lg-4 p-0">
             <div class="ribbon"><span> Offre Genius </span></div>
-            <img src="../imag/avion.jpg" alt="">
+            <img src="avion.jpg" alt="">
           </div>
           <div class="col-12 col-sm-12 col-md-12 col-lg-8 p-0">
             <span class="discount-holder"><span>Reservation</span></span>
@@ -120,43 +120,7 @@
                 </div>
 
                 <div class="form-content" >
-<?php 
-   if(isset($_POST["reserver"]))
-   {
-          $nom=$_POST["nom"];
-          $prenom=$_POST["prenom"];
-          $adress=$_POST["adresse"];
-          $telephone=$_POST["telephone"];
-          $passport=$_POST["passeport"];
-          $email=$_POST["email"];
-          
-        $query="select nombreplace from vol where idvol='$idvol'";
-            $result=$conn->query($query);
-            $data=$result->fetchAll();
-        $nombreplace=$data[0]['nombreplace'];
-            $query4="update vol set nombreplace=$nombreplace-1 where idvol='$idvol'";
-        $conn->exec($query4);
-        
-        $query2="insert into client values(NULL,'".$nom."','".$prenom."','".$adress."','$telephone','".$email."','".$passport."')";
-            $conn->exec($query2);
-
-        $queryR="select idClient from client ORDER BY idClient DESC";
-              $result=$conn->query($queryR);
-              $data2=$result->fetchAll();
-              $idClient=$data2[0]['idClient'];
-
-        $query3="insert into reservation values(NULL,$idClient,'$idvol','".date("Y/m/d")."',$nombreplace)";
-           $conn->exec($query3);
-        $query5="update reservation set nombrelimite=$nombreplace-1 where idvol='$idvol'";
-           $conn->exec($query5);
-
-        $queryR="select idReservation from reservation where idvol='$idvol' ORDER BY idReservation DESC";
-            $result=$conn->query($queryR);
-            $data2=$result->fetchAll();
-           header("location:confirmation.php?idReservation=".$data2[0]['idReservation']."");   
-           ob_end_flush(); 
-       }
- ?>
+<?php include('codeReservation.php');?>
                     <div class="row" >
                         <div class="col-md-6">
                             <form  method="POST">

@@ -137,7 +137,7 @@
                  <p class="card-text"></p>
                   </div>
                   <ul class="list-group list-group-flush">
-                  <li class="list-group-item"><span >date</span>:<?php echo $data[$i]['dateVole']; ?></li>
+                  <li class="list-group-item"><span >date</span>:<?php echo $data[$i]['dateVole'];?></li>
                     <li class="list-group-item"><span>nombre place</span>:<?php echo $data[$i]['nombreplace'];?></li>
              <li class="list-group-item"><span>prix</span>: <?php echo $data[$i]['prix']; ?></li>
                   </ul>
