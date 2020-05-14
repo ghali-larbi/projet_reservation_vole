@@ -4,14 +4,14 @@
 
 create table client
 (
-   cin            varchar(90) not null,
+   idClient            int  not null AUTO_INCREMENT,
    nom                 varchar(90),
    prenom               varchar(90),
    adress               varchar(90),
    numTelephone         varchar(90),
     email                varchar(90),
    passport            varchar(90) ,
-   primary key (cin)
+   primary key (idClient)
 );
 
 
@@ -30,12 +30,12 @@ create table vol
 create table reservation
 (
    idReservation        int  not null AUTO_INCREMENT,
-   cin                  varchar(90) not null,
+   idClient             int not null ,
    idvol                int not null,
    dateResr             date,
    nombrelimite         int,
    primary key (idReservation) ,
-   FOREIGN KEY (cin) REFERENCES client(cin) on update cascade on delete cascade,
+   FOREIGN KEY (idClient) REFERENCES client(idClient) on update cascade on delete cascade,
    FOREIGN KEY (idvol) REFERENCES vol(idvol) on update cascade on delete cascade
 );
 

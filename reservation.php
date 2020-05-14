@@ -1,3 +1,4 @@
+<?php ob_start();?>
 <!DOCTYPE html>
   <html lang="en">
   <head>
@@ -70,7 +71,7 @@
               <span class="sr-only">Next</span>
             </a>
           </div>
-          <?php
+<?php
                 include('connexion.php');
                 
                 if(isset($_GET["idvol"]))
@@ -80,7 +81,7 @@
                     $result=$conn->query($query);
                     $data=$result->fetchAll();
 
-                ?>
+?>
 <div class="row detail">
           <div class="col-12 col-sm-12 col-md-12 col-lg-4 p-0">
             <div class="ribbon"><span> Offre Genius </span></div>
@@ -119,46 +120,52 @@
                 </div>
 
                 <div class="form-content" >
-                <?php 
-   if(isset($_POST["reserver"]) && isset($_POST["cin"]) )
+<?php 
+   if(isset($_POST["reserver"]))
    {
-     
-       $cin=$_POST["cin"];
-       $nom=$_POST["nom"];
-       $prenom=$_POST["prenom"];
-       $adress=$_POST["adresse"];
-       $telephone=$_POST["telephone"];
-       $passport=$_POST["passeport"];
-       $email=$_POST["email"];
-      
+          $nom=$_POST["nom"];
+          $prenom=$_POST["prenom"];
+          $adress=$_POST["adresse"];
+          $telephone=$_POST["telephone"];
+          $passport=$_POST["passeport"];
+          $email=$_POST["email"];
+          
         $query="select nombreplace from vol where idvol='$idvol'";
-        $result=$conn->query($query);
-        $data=$result->fetchAll();
+            $result=$conn->query($query);
+            $data=$result->fetchAll();
         $nombreplace=$data[0]['nombreplace'];
-        $query4="update vol set nombreplace=$nombreplace-1 where idvol='$idvol'";
+            $query4="update vol set nombreplace=$nombreplace-1 where idvol='$idvol'";
         $conn->exec($query4);
         
-        
-        $query2="insert into client values('$cin','".$nom."','".$prenom."','".$adress."','$telephone','".$email."','".$passport."')";
-          $conn->exec($query2);
-        $query3="insert into reservation values(NULL,'$cin','$idvol','".date("Y/m/d")."',$nombreplace)";
-        $conn->exec($query3);
+        $query2="insert into client values(NULL,'".$nom."','".$prenom."','".$adress."','$telephone','".$email."','".$passport."')";
+            $conn->exec($query2);
+
+        $queryR="select idClient from client ORDER BY idClient DESC";
+              $result=$conn->query($queryR);
+              $data2=$result->fetchAll();
+              $idClient=$data2[0]['idClient'];
+
+        $query3="insert into reservation values(NULL,$idClient,'$idvol','".date("Y/m/d")."',$nombreplace)";
+           $conn->exec($query3);
         $query5="update reservation set nombrelimite=$nombreplace-1 where idvol='$idvol'";
-        $conn->exec($query5);
-    
+           $conn->exec($query5);
+
+        $queryR="select idReservation from reservation where idvol='$idvol' ORDER BY idReservation DESC";
+            $result=$conn->query($queryR);
+            $data2=$result->fetchAll();
+           header("location:confirmation.php?idReservation=".$data2[0]['idReservation']."");   
+           ob_end_flush(); 
        }
-     
-   
  ?>
                     <div class="row" >
                         <div class="col-md-6">
-                            <div class="form-group">
-                                <!-- from connecte avec page restvol.php -->
                             <form  method="POST">
-                                <input type="text" class="form-control" name="cin" placeholder=" cin *" value="" required>
-                            </div>
                             <div class="form-group">
                                 <input type="text" class="form-control" name="nom" placeholder="Nom *" value="" required/>
+                            </div>
+                            
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="passeport" placeholder="Passeport *" value="" required/>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -173,9 +180,7 @@
                             <div class="form-group">
                                 <input type="text" class="form-control" name="telephone" placeholder="Telephone *" value="" required/>
                             </div>
-                            <div class="form-group">
-                                <input type="text" class="form-control" name="passeport" placeholder="Passeport *" value="" required/>
-                            </div>
+                           
                         </div>
                         
                         <div class="col-md-6">
@@ -185,20 +190,7 @@
                         </div>
                     </div>
                     <button type="submit" class="btnSubmit" name="reserver">réservez maintenant</button>
-                    <?php
-                    if( isset($_POST["cin"]) )
-                    {
-                        
-                        $queryR="select * from reservation where idvol='$idvol' and cin='$cin' ORDER BY idReservation DESC";
-                        $result=$conn->query($queryR);
-                        $data2=$result->fetchAll();
-                        
-                    }
-                    ?>
-                    <a href="confirmation.php?idReservation=<?php echo $data2[0]['idReservation'];?>" class="btnSubmit" name="confirmer" >confirmé</a>
-                    <?php 
-                   
-                    ?>
+                 
                 </div>
             </div>
         </div>
